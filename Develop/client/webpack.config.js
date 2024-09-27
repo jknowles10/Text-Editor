@@ -21,35 +21,46 @@ module.exports = () => {
     },
     plugins: [
       new HtmlWebpackPlugin({
-        template: './src/index.html',
-        title: 'Webpack Plugin',
+        template: './index.html',
+        title: 'JATE',
       }),
-      new MiniCssExtractPlugin(),
-      new WorkboxPlugin.GenerateSW()
-      
+      new InjectManifest ({
+        fingerprints: false, 
+        inject: true, 
+        name: 'JATE',
+        description: "Note-taker application with JavaScript syntax highlighting!",
+        background_color: '#225ca3', 
+        theme_color: '#225ca3',
+        start_url: '/',
+        pulicPath: '/',
+        icons: [
+          { 
+          },
+        ],
+      }),
     ],
 
     module: {
       rules: [
         {
           test: /\.css$/i,
-          use: [MiniCssExtractPlugin.loader, 'css-loader'],
-        },
-        {
-          test: /\.(png|svg|jpg|jpeg|gif)$/i,
-          type: 'asset/resource',
+          use: ["style-loader", "css-loader"],
         },
         {
           test: /\.m?js$/,
-          exclude: /(node_modules|bower_components)/,
+          exclude: /node_modules/,
           use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env'],
-                },
-              },
+            loader: "babel-loader",
+            options: {
+              presets: ["@babel/preset-env"],
+              plugins: [
+                "@babel/plugin-proposal-object-rest-spread",
+                "@babel/transform-runtime",
+              ],
             },
-          ],
-        },  
-      },
-    };
+          },
+        },
+      ],
+    },
+  };
+};
